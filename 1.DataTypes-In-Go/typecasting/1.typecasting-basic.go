@@ -16,5 +16,7 @@ func main() {
 
 	fmt.Println("Age (int):", age)
 	fmt.Println("Age (float64):", ageFloat)
+	fmt.Println("Type of age:", fmt.Sprintf("%T", age))
+	fmt.Println("Type of ageFloat:", fmt.Sprintf("%T", ageFloat))
 }
 
