@@ -12,5 +12,13 @@ import "fmt"
 
 func main() {
 	var str string = "Hello, Go!" // string must be enclosed in double quotes
+
+
+	// You can also use shorthand syntax to declare and initialize a string variable
+	// str := "Hello, Go!" // This is an alternative way to declare and initialize a string variable
+
+	// using string literal
+	strLiteral := `Hello, Go!` // This is another way to declare a string using backticks, which allows for multi-line strings
 	fmt.Println(str)
+	fmt.Println(strLiteral)
 }
