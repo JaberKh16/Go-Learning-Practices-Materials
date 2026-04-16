@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	
 	age := 20
 
 	// typecasting using parsing
