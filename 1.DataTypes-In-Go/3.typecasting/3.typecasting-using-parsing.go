@@ -19,10 +19,5 @@ func main() {
 
 	// To convert a string back to an integer, you can use the strconv package
 	ageParsed, err := strconv.Atoi(ageStr) // Convert string back to int using Atoi
-	if err != nil {
-		fmt.Println("Error parsing age:", err)
-	} else {
-		fmt.Println("Parsed Age (int):", ageParsed)
-		fmt.Println("Type of ageParsed:", fmt.Sprintf("%T", ageParsed))
-	}
+	fmt.Println("Type of ageParsed, err:", fmt.Sprintf("%T", ageParsed), fmt.Sprintf("%T", err))
 }
