@@ -1,25 +1,23 @@
 package main
 
 import (
-	"fmt",
+	"fmt"
 	"math"
 )
 
 func main() {
 	x := 5
 
-	result := square(x)
-	fmt.Printf("The square of %d is %d\n", x, result)
-
-	result = cube(x)
-	fmt.Printf("The cube of %d is %d\n", x, result)
-
-	// using math.Pow for square
-	result = math.Pow(float64(x), 2)
+	// square using math.Pow
+	result := math.Pow(float64(x), 2)
 	fmt.Printf("The square of %d is %.0f\n", x, result)
 
-	// using math.Pow for cube
-	x = 5.234234
-	result = math.Ceil(float64(x))
-	fmt.Printf("The cube of %d is %.0f\n", x, result)
+	// cube using math.Pow
+	cube := math.Pow(float64(x), 3)
+	fmt.Printf("The cube of %d is %.0f\n", x, cube)
+
+	// example of Ceil (rounding up a float)
+	y := 5.234234
+	ceilVal := math.Ceil(y)
+	fmt.Printf("Ceil of %.6f is %.0f\n", y, ceilVal)
 }
