@@ -20,4 +20,12 @@ func main() {
 	y := 5.234234
 	ceilVal := math.Ceil(y)
 	fmt.Printf("Ceil of %.6f is %.0f\n", y, ceilVal)
+
+	// floor
+	floorVal := math.Floor(y)
+	fmt.Printf("Floor of %.6f is %.0f\n", y, floorVal)
+
+	// tan
+	tanValue := math.Tan(y)
+	fmt.Printf("Tan Value of %.6f is %.02f\n", y, tanValue)
 }
