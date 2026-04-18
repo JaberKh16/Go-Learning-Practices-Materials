@@ -10,6 +10,12 @@ func main() {
 		fmt.Println("Counter:", counter)
 		counter++
 	}
+
+
+	// infinite loop
+	// for {
+	// 	fmt.Println("running..")
+	// }
 }
 
 
