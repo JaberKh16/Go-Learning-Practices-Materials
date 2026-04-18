@@ -6,6 +6,13 @@ func main() {
 	
 	arr := [5]int{1, 2, 3, 4, 5} // Initialize an array with values
 
+	// slice are basically the dynamic array in go
+	// unintialized slice value is nil
+	var slicedArr []int
+	fmt.Println(slicedArr == nil) // returns true
+	fmt.Println(len(slicedArr)) // returns 0
+
+
 	// Slicing the array to create a slice
 	slice := arr[1:4] // This will create a slice containing elements from index 1 to 3 (4 is exclusive)
 
