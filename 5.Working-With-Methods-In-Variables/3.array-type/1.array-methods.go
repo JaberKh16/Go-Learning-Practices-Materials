@@ -18,7 +18,7 @@ func printArr(arr []int) {
 	// fmt.Printf("%T\n", arr)
 }
 
-func performOperation(option string,  arr [] int ) [] {
+func performOperation(option string,  arr [] int )  {
 
 }
 
@@ -26,14 +26,14 @@ func main(){
 	arr := [] int {1, 2, 10, 423, 565, 12}
 
 	// get the length
-	fmt.Println(len(arr))
+	fmt.Println(len(arr)) // returns [1, 2, 10, 423, 565, 12]
 
 	// print the array
 	printArr(arr)
 
 
 	// append method
-	arr1 := apppend(55)
+	arr1 := append(arr, 100) //  [1, 2, 10, 423, 565, 12]
 	printArr(arr1)
 
 
