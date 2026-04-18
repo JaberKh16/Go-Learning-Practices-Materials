@@ -6,6 +6,7 @@ func main() {
 	var arr [5]int // Declare an array of 5 integers
 
 	// print the array
+	// for each type => int -> 0, string -> "", bool -> false
 	fmt.Println("Initial Array: ",arr) // [0, 0, 0, 0, 0] though type is int
 
 
