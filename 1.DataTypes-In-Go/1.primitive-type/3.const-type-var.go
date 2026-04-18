@@ -15,8 +15,19 @@ package main
 import "fmt"
 
 func main() {
+	
+	// single value constant
 	const name string = "Go Programming"
 	// name := "New Name" // This will cause a compile-time error because 'name' is a constant
 
-	fmt.Println("Name:", name)
+
+	// multi-value constant
+	const (
+		port = 5500
+		host = "localhost"
+	)
+		
+
+	fmt.Println("Constant-1:", name)
+	fmt.Println("Other Constants:", port, host)
 }
