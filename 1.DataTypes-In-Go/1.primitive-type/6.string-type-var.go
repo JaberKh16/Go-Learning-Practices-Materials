@@ -21,4 +21,11 @@ func main() {
 	strLiteral := `Hello, Go!` // This is another way to declare a string using backticks, which allows for multi-line strings
 	fmt.Println(str)
 	fmt.Println(strLiteral)
+
+
+	// looping
+	for index, unicode := range str {
+		fmt.Println(index, unicode, string(unicode))
+	}
+
 }
