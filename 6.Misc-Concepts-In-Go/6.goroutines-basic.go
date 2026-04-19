@@ -1,5 +1,7 @@
 /*
-Package main demonstrates the core concepts of goroutines in Go and their practical use cases.
+	Goroutines Concepts In Go
+	=========================
+
 
 	# What Are Goroutines?
 
@@ -74,6 +76,10 @@ func printNumbers() {
 		fmt.Println("Number:", i)
 		time.Sleep(500 * time.Millisecond)
 	}
+}
+
+func task(id int) int {
+	return id
 }
 
 func main() {
