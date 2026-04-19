@@ -96,11 +96,29 @@ func printScopedIntefaceSlice[T int | string | bool](items []T) {
 	}
 }
 
-// generic function => via comparables(any primitive types support)
+// generic function => via comparables(any primitive types, array/structs/channels of comparable type, support)
 func printThroughComparablesSlice[T comparable](items []T){
 	for _, item := range items {
 		fmt.Println(item)
 	}
+}
+
+
+// multi-type parameter generic function
+func multipleTypes[T comparable, V string](items []T, customMessage V) ([]T, V) {
+	fmt.Println(customMessage)
+	return items, customMessage
+}
+
+func filterAndMessage[T comparable, V string](items []T, customMessage V, target T) ([]T, V) {
+	var filtered []T
+	for _, item := range items {
+		if item == target {
+			filtered = append(filtered, item)
+		}
+	}
+	fmt.Println(customMessage)
+	return filtered, customMessage
 }
 
 func printInfo[T any](s Stack[T]) string {
