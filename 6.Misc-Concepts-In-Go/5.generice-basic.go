@@ -96,6 +96,13 @@ func printScopedIntefaceSlice[T int | string | bool](items []T) {
 	}
 }
 
+// generic function => via comparables(any primitive types support)
+func printThroughComparablesSlice[T comparable](items []T){
+	for _, item := range items {
+		fmt.Println(item)
+	}
+}
+
 func printInfo[T any](s Stack[T]) string {
 	result := fmt.Sprintf("Stack elements: %v", s.elements)
 	fmt.Println(result)
