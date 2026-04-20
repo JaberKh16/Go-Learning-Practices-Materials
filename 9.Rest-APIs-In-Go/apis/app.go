@@ -3,6 +3,9 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 
 	config "github.com/jaber/rest-apis/internal"
 )
@@ -26,9 +29,17 @@ func main(){
 		Handler: router,
 	}
 
-	// start listeing
-	err := server.ListenAndServe()
-	if err != nil {
-		log.Fatalf("Server failed to start: %s", err.Error())
-	}
+	done := make(chan os.Signal, 1)
+
+	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		// start listeing
+		err := server.ListenAndServe()
+		if err != nil {
+			log.Fatalf("Server failed to start: %s", err.Error())
+		}
+	}()
+	// blocking
+	<-done
 }
