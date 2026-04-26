@@ -26,7 +26,7 @@ func main(){
 
 
 	// delete key
-	delete(mapsData, connectionLimit)
+	delete(mapsData, mapsData["connectionLimit"])
 
 	// clear the map
 	clear(mapsData)
