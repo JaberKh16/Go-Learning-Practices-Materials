@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
+	"net/url"
+	"strings"
 )
 
 // Todo Model
@@ -74,6 +77,108 @@ func choseOption(option string, resp *http.Response) ([]Todos, error) {
 	}
 
 	return todos, nil
+}
+
+func perfomPostRequest(){
+	todo := {
+		UserID: 23,
+		Title: "Soemthing",
+		Completed: true
+	}
+
+	// convert the todos struct to json
+	jsonData, err := json.Marshal(todo)
+	if err != nil {
+		fmt.Println("error marshalling :", err)
+	}
+
+	// convert json data sting 
+	jsonString := string(jsonData)
+	// convert string data to reader
+	jsonDataReader := strings.NewReader(jsonString)
+
+
+	// setup a POST request
+	siteUrl := "https://jsonplaceholder,typicode.com/todos"
+	response, err := http.Post(siteUrl, "application/json", jsonDataReader)
+	if err != nil {
+		fmt.Println("error sending request", err)
+		return
+	}
+
+	defer response.Body.Close()
+
+	data, _ := ioutil.ReadAll(response.Body)
+	fmt.Printf("Request Response: %s, Status: %s",string(data), response.Status)
+}
+
+
+func perfomUpdateRequest(){
+	todo := {
+		UserID: 2323,
+		Title: "Soemthing",
+		Completed: true
+	}
+
+	// convert the todos struct to json
+	jsonData, err := json.Marshal(todo)
+	if err != nil {
+		fmt.Println("error marshalling :", err)
+	}
+
+	// convert json data sting 
+	jsonString := string(jsonData)
+	// convert string data to reader
+	jsonDataReader := strings.NewReader(jsonString)
+
+
+	// setup a PUT request
+	siteUrl := "https://jsonplaceholder,typicode.com/todos/1"
+	req, err := http.NewRequest(http.MethodPut, siteUrl, jsonDataReader)
+	if err != nil {
+		fmt.Println("error sending request", err)
+		return
+	}
+
+	// setup the content type
+	req.Header.Set("Content-Type", "application/json")
+
+	// send the request
+	client := http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Println("error sending request: ", err)
+	}
+
+	defer response.Body.Close()
+
+	data, _ := ioutil.ReadAll(response.Body)
+	fmt.Printf("Request Response: %s, Status: %s",string(data), res.Status)
+}
+
+func performDeleteRequest(){
+	// url
+	const siteUrl := "https://jsonplaceholder.typicode.com/todos/1"
+
+	// setup a request 
+	request, err := http.NewRequest(http.MethodDelete, sitesiteUrl, nil)
+	if err != nil {
+		fmt.Println("error performing request:DELETE", err)
+		return
+	}
+	
+	// send the request
+	client := http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		fmt.Println("error sending request: ", err)
+		return
+	}
+	defer response.Body.Close()
+
+	data, _ := ioutil.ReadFile(response.Body)
+	fmt.Printf("Request Response: %s, Status: %s",string(data), res.Status)
+
 }
 
 func main() {
