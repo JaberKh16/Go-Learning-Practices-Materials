@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -26,18 +27,20 @@ func interfaceTypeAssertionIntro() {
 	fmt.Println("--------------------------------")
 }
 
-
+// generics
 func onPrimitiveType[T any](val T) {
 	fmt.Printf("primitive handler running, type: %T, simulated value: %s", val, val)
 }
 
 func onComplexType[T any](val T) {
-	fmt.Printf("complex handler running, type: %T, imulated value: %s", val, val)
+	fmt.Printf("complex handler running, type: %T, simulated value: %s", val, val)
 }
+
+
 
 func getInput() (string, error) {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("Enter the value: ")
+	fmt.Print("Enter the (type,value): ")
 
 	input, err := reader.ReadString('\n')
 	if err != nil {
@@ -46,22 +49,94 @@ func getInput() (string, error) {
 	return strings.TrimSpace(input), nil
 }
 
+func checkSimulatorOption(typeType string, typeVal string) (any, error) {
+	switch typeType {
+	case "int":
+		v, err := strconv.Atoi(typeVal)
+		if err != nil {
+			return nil, err
+		}
+		return v, nil
 
-func performOperation(choice int, input string) {
+	case "float":
+		v, err := strconv.ParseFloat(typeVal, 64)
+		if err != nil {
+			return nil, err
+		}
+		return v, nil
+
+	case "byte":
+		if len(typeVal) == 0 {
+			return nil, fmt.Errorf("empty value for byte")
+		}
+		return typeVal[0], nil
+
+	case "string":
+		return typeVal, nil
+
+	case "bool":
+		v, err := strconv.ParseBool(typeVal)
+		if err != nil {
+			return nil, err
+		}
+		return v, nil
+	case "array":
+		arr := strings.Split(typeVal, ",")
+		return arr, nil
+	case "maps":
+		// input format: key1:val1,key2:val2
+		m := make(map[string]string)
+		pairs := strings.Split(typeVal, ",")
+		for _, p := range pairs {
+			kv := strings.SplitN(p, ":", 2)
+			if len(kv) != 2 {
+				return nil, fmt.Errorf("invalid map format")
+			}
+			m[strings.TrimSpace(kv[0])] = strings.TrimSpace(kv[1])
+		}
+		return m, nil
+
+	case "struct":
+		// simulate struct as map
+		s := map[string]string{
+			"value": typeVal,
+		}
+		return s, nil
+
+	case "interfaces":
+		var i any = typeVal
+		return i, nil
+
+	default:
+		return nil, fmt.Errorf("unsupported type")
+	}
+}
+
+
+func performOperation(choice int, typeType, typeVal string) {
 	switch choice {
 
 	case 1:
 		// simulate primitive types: int, float, rune, string, bool, byte
 		// var checkType interface {} 
 		// checkType := input.(string)
-		onPrimitiveType(input) // string input
+
+		simulatedVal, err := checkSimulatorOption(typeType, typeVal)
+		if err != nil {
+			fmt.Println("Error:", err)
+			return
+		}
+		onPrimitiveType(simulatedVal)
 
 	case 2:
-		// simulate complex type
-		typeOption := map[string]string{
-			"value": input,
+		// simulate complex types: array, structs, map, interface
+		simulatedVal, err := checkSimulatorOption(typeType, typeVal)
+		if err != nil {
+			fmt.Println("Error:", err)
+			return
 		}
-		onComplexType(typeOption)
+		
+		onComplexType(simulatedVal)
 
 	default:
 		fmt.Println("invalid option..")
@@ -93,13 +168,19 @@ func main() {
 	}
 
 	// Step 2: get string input
-	input, err := getInput()
+	typeType, err := getInput()
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
-	fmt.Println(input)
+
+	typeVal, err := getInput()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	fmt.Println(typeType, typeVal)
 
 	// Step 3: perform operation
-	performOperation(choiceVal, input)
+	performOperation(choiceVal, typeType, typeVal)
 }
