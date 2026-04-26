@@ -17,6 +17,11 @@ func main() {
 
 	defer response.Body.Close() // close the response body
 
+	// check if the status is pok
+	if response.StatusCode != http.StatusOK {
+		fmt.Printf("status hits error: ", response.Status)
+	}
+
 	// read the content of the response => ioutil.ReadAll() returns array of bytes
 	content, err := ioutil.ReadAll(response.Body)
 	if err != nil {
