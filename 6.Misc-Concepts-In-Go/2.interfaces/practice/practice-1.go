@@ -39,11 +39,21 @@ func processFile(filename string) error {
 func main(){
 	err := processFile("file.txt")
 	if err != nil {
+		// via if conditionals
+		// if _, ok := err.(*os.PathError); ok {
+		// 	fmt.Printf("path error: %s\n", err)
+		// } else if _, ok := err.(*ReadError); ok {
+		// 	fmt.Printf("read error: %s\n", err)
+		// } else {
+		// 	fmt.Printf("unknown error: %s\n", err)
+		// }
+
+		// via type switch
 		switch e := err.(type) {
 			case *os.PathError:
-				fmt.Printf("Path error: %s\n", e)
-			case *os.ReadError:
-				fmt.Printf("Path error: %s\n", e)
+				fmt.Printf("Ppath error: %s\n", e)
+			case *ReadError:
+				fmt.Printf("read error: %s\n", e)
 			default:
 				fmt.Printf("unknown error: %s\n", e)
 		}
