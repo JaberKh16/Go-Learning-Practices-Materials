@@ -104,6 +104,7 @@
 	If a type implements the methods, it satisfies the interface automatically.
 */
 
+// program demonstrates embedding interfaces
 package main
 
 import (
@@ -115,6 +116,19 @@ import (
 type Shape interface{
 	Area() float64
 }
+
+type Measurable interface {
+	Perimeter() float64
+}
+
+
+// embeded interface
+type Geometry interface {
+	Shape
+	Measurable
+}
+
+
 
 
 // struct-1: Rectangle
@@ -128,8 +142,18 @@ type Circle struct {
 	radius float64
 }
 
+// struct-3 Error
+type CalculationError struct {
+	message string
+}
+
 
 // functions to write
+func (r Rectangle) Perimeter() float64 {
+	return  2 * (r.width + r.height) 
+}
+
+
 func (r Rectangle) Area() float64 {
 	return  r.width * r.height
 }
@@ -138,13 +162,31 @@ func (c Circle) Area() float64 {
 	return math.Pi * math.Pow(c.radius, 2)
 }
 
-func printArea(t interface {}){
+func (c Circle) Perimeter() float64 {
+	return  2 * math.Pi * c.radius
+}
+
+
+func descibeStruct(t interface {}){
 	fmt.Println("Structs: ", t)
 }
 
-func calculateArea(s Shape) float64 {
-	return s.Area()
+func descibeShape(g Geometry) float64 {
+	fmt.Println("Area: ", g.Area())
+	fmt.Println("Perimeter: ", g.Perimeter())
 }
+
+func (ce CalculationError) Error() string {
+	return ce.message
+}
+
+func performCalculation(val float64) (float64, error) {
+	if val < 0 {
+		return  0, CalculationError{message: "value can't be zero"}
+	}
+	return  math.Sqrt(val), nil
+}
+
 
 func main(){
 
@@ -153,11 +195,11 @@ func main(){
 	circle := Circle{ radius: 3.23}
 
 	// see the structs
-	printArea(rectangle)
-	printArea(circle)
+	descibeStruct(rectangle)
+	descibeStruct(circle)
 
 
 	// calculate the area
-	fmt.Println("Rectange Area: ", calculateArea(rectangle)) 
-	fmt.Println("Circle Area: ", calculateArea(circle)) 
+	descibeShape(rectangle)
+	descibeShape(circle)
 }
