@@ -116,6 +116,54 @@ func updateMovie(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Movie not found", http.StatusNotFound)
 }
 
+func patchUpdateMovie(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	for index, item := range movies {
+		if item.ID == params["id"] {
+
+			// decode into a map for partial updates
+			var updates map[string]interface{}
+			if err := json.NewDecoder(r.Body).Decode(&updates); err != nil {
+				http.Error(w, "Invalid request body", http.StatusBadRequest)
+				return
+			}
+
+			// apply updates safely
+			if name, ok := updates["name"].(string); ok {
+				movies[index].Name = name
+			}
+
+			if isbn, ok := updates["isbn"].(string); ok {
+				movies[index].ISBN = isbn
+			}
+
+			if year, ok := updates["year"].(float64); ok {
+				movies[index].Year = int(year)
+			}
+
+			if genre, ok := updates["genre"].(string); ok {
+				movies[index].Genre = genre
+			}
+
+			if directorData, ok := updates["director"].(map[string]interface{}); ok {
+				if name, ok := directorData["name"].(string); ok {
+					movies[index].Director.Name = name
+				}
+				if total, ok := directorData["total_released_movies"].(float64); ok {
+					movies[index].Director.TotalReleasedMovies = int(total)
+				}
+			}
+
+			json.NewEncoder(w).Encode(movies[index])
+			return
+		}
+	}
+
+	http.Error(w, "Movie not found", http.StatusNotFound)
+}
+
 func deleteMovie(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r) // mux.Vars() contains the request body
@@ -157,6 +205,7 @@ func main() {
 	r.HandleFunc("/api/movies/{id}", getMovie).Methods("GET")
 	r.HandleFunc("/api/movies", createMovie).Methods("POST")
 	r.HandleFunc("/api/movies/{id}", updateMovie).Methods("PUT")
+	r.HandleFunc("/api/movies/{id}", patchUpdateMovie).Methods("PATCH")
 	r.HandleFunc("/api/movies/{id}", deleteMovie).Methods("DELETE")
 
 
