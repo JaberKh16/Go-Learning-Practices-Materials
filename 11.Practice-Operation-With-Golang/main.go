@@ -1,19 +1,23 @@
 package main
 
 import (
-	"crypto/rand"
 	"encoding/json"
 	"fmt"
+	"log"
+	"math/rand"
+	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
 )
 
+// structs
 type Movie struct {
 	ID string `json:"id"`
 	Name string `json:"name"`
 	ISBN string `json:"isbn"`
 	Year int `json:"year"`
+	Genre string `json:"genre"`
 	Director Director `json:"director"`
 }
 
@@ -22,8 +26,24 @@ type Director struct {
 	TotalReleasedMovies int `json:"total_released_movies"`
 }
 
-func printData(data interface{}) {
-	fmt.Println(data)
+var movies [] Movie
+
+
+// -------- Utitlities --------------
+
+func initializeWithStaticData() *Movie {
+	movie := Movie{
+		ID:    strconv.Itoa(rand.Intn(1000)),
+		Name:  "The Godfather",
+		ISBN:  strconv.Itoa(rand.Intn(1000000)),
+		Year:  1972,
+		Genre: "Crime",
+		Director: Director{
+			Name:                "Francis Ford Coppola",
+			TotalReleasedMovies: 47,
+		},
+	}
+	return &movie
 }
 
 func convertStructToJSON(data interface{}) {
@@ -37,44 +57,23 @@ func convertStructToJSON(data interface{}) {
 	fmt.Println(string(jsonData))
 }
 
-func appendData(mv *Movie) [] Movie{
+func appendData(mv *Movie) {
 	movies = append(movies, *mv)
-	return movies
 }
 
-func createData(){
-	// create a slice of movies
-	movie = append(movies, Movie{
-		ID: "1",
-		Name: "The Godfather",
-		ISBN: "1234567890",
-		Year: 1972,
-		Director: Director{
-			Name: "Francis Ford Coppola",
-			TotalReleasedMovies: 47,
-		},
-	})
-	appendData(&movie)
+func printData(data interface{}) {
+	fmt.Println(data)
 }
 
+
+
+// ---------------- APIs Func Handlers ----------------
 func getMovies(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder().Encode(movies)
-}
-
-func deleteMovie(w http.ResponseWriter, r *http.Request){
-	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(r) // mux.Vars() contains the request body
-
-	for index, item := range movies {
-		if item.ID == params["id"] {
-			movies = append(movies[:index], movies[index + 1: ]...)
-			break
-		}
-
-	}
 	json.NewEncoder(w).Encode(movies)
 }
+
+
 
 func getMovie(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -86,13 +85,14 @@ func getMovie(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	http.Error(w, "Movie not found", http.StatusNotFound)
 }
 
 func createMovie(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var movie Movie
 	_ = json.NewDecoder(r.Body).Decode(&movie)
-	movie.ID = strconv.Itoa(rand.Intn(10000000))
+	movie.ID = strconv.Itoa(rand.Intn(10000000)) // strconv.Itoa(int): string
 	movies = append(movies, movie)
 	json.NewEncoder(w).Encode(movie)
 }
@@ -109,52 +109,63 @@ func updateMovie(w http.ResponseWriter, r *http.Request) {
 			movie.ID = params["id"]
 			movies = append(movies, movie)
 			json.NewEncoder(w).Encode(movie)
+			// return
 		}
 	}
-
+	// if wanted direct motify message
+	http.Error(w, "Movie not found", http.StatusNotFound)
 }
 
-var movies [] Movie
+func deleteMovie(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r) // mux.Vars() contains the request body
+
+	for index, item := range movies {
+		if item.ID == params["id"] {
+			movies = append(movies[:index], movies[index + 1: ]...)
+			json.NewEncoder(w).Encode(movies)
+			return
+		}
+	}
+	http.Error(w, "Movie not found", http.StatusNotFound)
+}
+
+
 
 func main() {
-	movie := Movie{
-		ID: "1",
-		Name: "The Godfather",
-		ISBN: "1234567890",
-		Year: 1972,
-		Director: Director{
-			Name: "Francis Ford Coppola",
-			TotalReleasedMovies: 47,
-		},
-	}
-
+	
+	// initialize with data
+	movie := initializeWithStaticData()
 		
-	// print as struct
-	printData(movie)
+	// // print as struct
+	// printData(movie)
 	 
-	// print as JSON
-	convertStructToJSON(movie)
+	// // print as JSON
+	// convertStructToJSON(movie)
 
-	// create data
-	createData()
+	// append pass the movie struct reference
+	appendData(movie)
 
-	// create a route
+
+
+	// create a mux route
 	r := mux.NewRouter()
 
 
 	// handle function
-	r.HandleFunc("/movies", getMovies).Methods("GET")
-	r.HandleFunc("/movies/{id}", getMovie).Methods("GET")
-	r.HandleFunc("/movies", createMovie).Methods("POST")
-	r.HandleFunc("/movies/{id}", updateMovie).Methods("PUT")
-	r.HandleFunc("/movies/{id}", deleteMovie).Methods("DELETE")
+	r.HandleFunc("/api/movies", getMovies).Methods("GET")
+	r.HandleFunc("/api/movies/{id}", getMovie).Methods("GET")
+	r.HandleFunc("/api/movies", createMovie).Methods("POST")
+	r.HandleFunc("/api/movies/{id}", updateMovie).Methods("PUT")
+	r.HandleFunc("/api/movies/{id}", deleteMovie).Methods("DELETE")
 
 
 	// run ther server
-	const PORT string := 8000
+	const PORT  = "8000"
 	fmt.Printf("Server run at port: %s", PORT)
 
-	log.Fatal(http.ListenAndServe(":8000", r))
+	// log.Fatal(http.ListenAndServe(":8000", r))
+	log.Fatal(http.ListenAndServe(":" +  PORT, r))
 
 
 }
