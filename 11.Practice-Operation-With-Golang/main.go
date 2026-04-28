@@ -30,7 +30,6 @@ var movies [] Movie
 
 
 // -------- Utitlities --------------
-
 func initializeWithStaticData() *Movie {
 	movie := Movie{
 		ID:    strconv.Itoa(rand.Intn(1000)),
@@ -109,7 +108,7 @@ func updateMovie(w http.ResponseWriter, r *http.Request) {
 			movie.ID = params["id"]
 			movies = append(movies, movie)
 			json.NewEncoder(w).Encode(movie)
-			// return
+			return
 		}
 	}
 	// if wanted direct motify message
