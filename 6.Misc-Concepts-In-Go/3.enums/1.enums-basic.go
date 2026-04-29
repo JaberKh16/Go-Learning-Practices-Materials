@@ -93,9 +93,7 @@ import (
 // define a custom type
 type OrderStatus int
 type Role string
-type ApplicationStatus int 
-type JobStatus int 
-type HTTPMethod int 
+
 
 // enum values => OrderStatus
 const (
@@ -110,33 +108,6 @@ const (
 	Admin Role = "ADMIN"
 	User  Role = "USER"
 	Guest Role = "GUEST"
-)
-
-
-// database state
-const (
-	Applied ApplicationStatus = iota
-	Interviewing
-	Approved
-	Rejected
-)
-
-// http method
-const (
-	GET HTTPMethod = iota 
-	POST 
-	PUT 
-	DELETE
-)
-
-
-// job status queue
-const (
-	Queued JobStatus = iota
-	Running
-	Success 
-	Failed 
-	Retrying
 )
 
 
@@ -156,13 +127,36 @@ func (s OrderStatus) String() string {
 	}
 }
 
+
+// MarshalJSON for JSON encoding
 func (s OrderStatus) MarshalJSON() ([]byte, error)  {
 	return []byte(`"` + s.String() + `"`), nil
 }
 
-func (s OrderStatus) Unmarshal() ([]byte, error)  {
-	return []byte()
+// UnmarshalJSON for JSON decoding (fixed method signature)
+func (s *OrderStatus) UnmarshalJSON(data []byte) error {
+	// Remove quotes from JSON string
+	str := string(data)
+	if len(str) > 1 && str[0] == '"' && str[len(str)-1] == '"' {
+		str = str[1 : len(str)-1]
+	}
+	
+	// Map string back to enum value
+	switch str {
+	case "Pending":
+		*s = Pending
+	case "Received":
+		*s = Received
+	case "Confirmed":
+		*s = Confirmed
+	case "Shipped":
+		*s = Shipped
+	default:
+		return fmt.Errorf("invalid OrderStatus: %s", str)
+	}
+	return nil
 }
+
 
 func main(){
 	var status OrderStatus = Shipped
