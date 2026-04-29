@@ -35,7 +35,15 @@ func newCoasterHandlers() *coasterHandlers {
 }
 
 func staticData() (map[string]Coaster){
-
+	data := Coaster{
+		"id1": Coaster{
+			Name: "Fury 325",
+			Height: 99,
+			ID: "id1",
+			InPark: "Carowinds",
+			Manufacture: "B+M",
+		}
+	}
 }
 
 func main() {
