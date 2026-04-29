@@ -83,6 +83,7 @@ func exampleMain() {
 
 	// define a variable
 	var limit int = 10
+	now := time.Now()
 
 	// defining waitgroups
 	var wg sync.WaitGroup
@@ -95,6 +96,10 @@ func exampleMain() {
 
 	// Main goroutine work
 	fmt.Println("Main function running")
+
+	// elapsed
+	fmt.Println("Time Elapased: ",time.Since(now))
+
 
 	// Wait for all goroutines to finish
 	wg.Wait()

@@ -83,6 +83,9 @@ func task(id int) int {
 }
 
 func main() {
+	// start time
+	now := time.Now()
+
 	// Start goroutine
 	go sayHello()
 
@@ -92,8 +95,12 @@ func main() {
 	// Main goroutine work
 	fmt.Println("Main function running")
 
+	// elapsed
+	fmt.Println("Time Elapased: ",time.Since(now))
+
+
 	// Wait so goroutines can finish
-	time.Sleep(3 * time.Second)
+	time.Sleep(3 * time.Microsecond)
 
 	fmt.Println("Main function finished")
 }
