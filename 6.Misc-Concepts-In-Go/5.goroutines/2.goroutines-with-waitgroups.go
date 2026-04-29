@@ -2,7 +2,6 @@
 	Goroutines Concepts In Go
 	=========================
 
-
 	# What Are Goroutines?
 
 	A goroutine is a lightweight thread managed by the Go runtime.
@@ -36,16 +35,123 @@
 	- Managed by Go runtime scheduler
 	- Thousands or even millions can run efficiently
 
-	# Synchronization Problem
+	========================================================
+	⚠️ Concurrency Problems
+	========================================================
+
+	# 1. Race Condition
+
+	A race condition happens when multiple goroutines access and modify
+	shared data at the same time without synchronization.
+
+	❌ Problem Example:
+
+		var counter int
+
+		func increment() {
+			counter++ // unsafe
+		}
+
+		func main() {
+			for i := 0; i < 1000; i++ {
+				go increment()
+			}
+		}
+
+		Result is unpredictable because multiple goroutines write at once.
+
+	✅ Solution:
+	- Use sync.Mutex
+	- Use channels
+
+	# 2. Deadlock
+
+	A deadlock happens when goroutines are waiting on each other forever.
+
+	❌ Problem Example:
+
+		func main() {
+			ch := make(chan int)
+
+			ch <- 10 // no receiver → deadlock
+		}
+
+	This causes:
+
+		fatal error: all goroutines are asleep - deadlock!
+
+	Another example (circular wait):
+
+		Goroutine A waits for B
+		Goroutine B waits for A
+
+	✅ Solution:
+	- Ensure sender/receiver pairs exist
+	- Avoid circular dependencies
+
+	# 3. Livelock
+
+	Livelock happens when goroutines keep changing state in response
+	to each other but make no progress.
+
+	❌ Example (conceptual):
+
+		Two goroutines keep yielding to each other:
+
+		for {
+			select {
+			case <-other:
+				// give way
+			default:
+				// try again
+			}
+		}
+
+	They are active but never complete useful work.
+
+	✅ Solution:
+	- Add delays/backoff (time.Sleep)
+	- Reduce over-coordination
+
+	# 4. Starvation
+
+	Starvation happens when a goroutine never gets CPU time or resources
+	because others dominate execution.
+
+	❌ Example:
+
+		func main() {
+			go func() {
+				for {
+					// busy loop (never yields)
+				}
+			}()
+
+			go func() {
+				println("may never run")
+			}()
+
+			select {}
+		}
+
+	Second goroutine may not get enough execution time.
+
+	✅ Solution:
+	- Use runtime.Gosched()
+	- Avoid tight infinite loops
+	- Use proper scheduling (channels, waits)
+
+	========================================================
+	# Synchronization Tools
 
 	Goroutines run independently, so timing is not guaranteed.
-	This may lead to race conditions if multiple goroutines access shared data.
 
-	Solution: use synchronization tools like:
+	To control execution:
 	- channels
 	- mutexes (sync.Mutex)
-	- WaitGroups
+	- WaitGroups (sync.WaitGroup)
 
+	========================================================
 	# Use Cases of Goroutines
 
 	1. Handling multiple web requests
@@ -54,10 +160,19 @@
 	4. Real-time systems (chat apps, streaming)
 	5. API calls in parallel
 
+	========================================================
 	# Key Idea
 
-	Goroutines allow functions to run concurrently in a lightweight and efficient way.
-	They are the foundation of concurrency in Go.
+	Goroutines allow functions to run concurrently in a lightweight
+	and efficient way.
+
+	But improper use can lead to:
+	- race conditions
+	- deadlocks
+	- livelocks
+	- starvation
+
+	Understanding these is critical for writing safe concurrent programs.
 */
 
 package main
