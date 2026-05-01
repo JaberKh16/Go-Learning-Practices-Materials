@@ -6,16 +6,16 @@ import (
 	"net/http"
 	"time"
 	
-	"github.com/jaber/go-web/apis"
+	// "github.com/jaber/go-web/apis"
 	"github.com/jaber/go-web/handlers"
-	"github.com/jaber/go-web/middlewares"
-	"github.com/jaber/go-web/utitlities"
+	// "github.com/jaber/go-web/middlewares"
+	// "github.com/jaber/go-web/utitlities"
 )
 
 
 func startDefaultHttpServer() error {
-	err := http.ListenAndServe(":8000", nil) // nil => DefaultServerMux
 	fmt.Println("Server started on http://localhost:8000")
+	err := http.ListenAndServe(":8000", nil) // nil => DefaultServerMux
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 		return err
@@ -35,9 +35,12 @@ func startCustomHttpServer(port string) error {
 }
 
 
+
 func main() {
+	// handlers setup here
 	// http.HandleFunc("/", utitlities.HandleIndex)
 	// http.HandleFunc("/file/serve", utitlities.HandleServeFile)
+	http.HandleFunc("/xml/data", handlers.WorkingWithXMLData)	
 
 
 	// Start server
@@ -45,8 +48,6 @@ func main() {
 		log.Fatal("ListenAndServe:", err)
 	}
 
-
-	time.Sleep(100 * time.Second)
 
 	// working with middleware
 	// finalHandler := http.HandlerFunc(middlewares.Final)
@@ -60,11 +61,11 @@ func main() {
 	// router := http.NewServeMux()
 	// router.HandleFunc("/product/{id:[0-9]+}", utitlities.pageHandler)
 
+	// subrouter instance
 	// router.HandleFunc("/products", productHandler).Host("www.example.com").Methods("GET").Schemes("https")
 
 	// get the resposne
-	
-	handlers.WorkingWithXMLData()
+	// handlers.WorkingWithXMLData()
 }
 
 
