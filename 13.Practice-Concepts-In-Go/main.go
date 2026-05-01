@@ -38,16 +38,25 @@ func startCustomHttpServer(port string) error {
 
 
 func main() {
+
+	// get the resposne
+	handlers.WorkingWithXMLData()
+
+
+	// work on map
+	data.WorkOnMap()
+
+
 	// handlers setup here
 	// http.HandleFunc("/", utitlities.HandleIndex)
 	// http.HandleFunc("/file/serve", utitlities.HandleServeFile)
-	http.HandleFunc("/xml/data", handlers.WorkingWithXMLData)	
+	// http.HandleFunc("/xml/data", handlers.PerformRequest)	
 
 
 	// Start server
-	if err := startCustomHttpServer("8000"); err != nil {
-		log.Fatal("ListenAndServe:", err)
-	}
+	// if err := startCustomHttpServer("8000"); err != nil {
+	// 	log.Fatal("ListenAndServe:", err)
+	// }
 
 
 	// working with middleware
@@ -65,12 +74,7 @@ func main() {
 	// subrouter instance
 	// router.HandleFunc("/products", productHandler).Host("www.example.com").Methods("GET").Schemes("https")
 
-	// get the resposne
-	// handlers.WorkingWithXMLData()
-
-
-	// work on map
-	data.WorkOnMap()
+	
 }
 
 

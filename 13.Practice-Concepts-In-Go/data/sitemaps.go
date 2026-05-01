@@ -17,7 +17,7 @@ type NewsMap struct {
 
 
 func WorkOnMap() map[string]NewsMap {
-	var s SitemapIndex
+	// var s SitemapIndex
 	var n News
 
 	// Create a map to store news by keyword

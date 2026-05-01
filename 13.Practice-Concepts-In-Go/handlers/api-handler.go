@@ -44,6 +44,30 @@ func WorkingWithXMLData(){
 	}
 }
 
+func WorkingWithXMLStaticDataRequest(w http.ResponseWriter, r *http.Request) {
+	data := []byte(`<sitemapindex>
+	<sitemap>
+		<loc>https://example.com</loc>
+		<lastmod>2026-05-01</lastmod>
+	</sitemap>
+	</sitemapindex>`)
+
+	var siteMapIndex SiteMapIndex
+	err := xml.Unmarshal(data, &siteMapIndex)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Fprintln(w, "Parsed sitemaps:")
+
+	for _, sitemap := range siteMapIndex.Sitemaps {
+		fmt.Fprintln(w, "URL:", sitemap.Loc)
+		fmt.Fprintln(w, "Last Modified:", sitemap.LastMod)
+		fmt.Fprintln(w, "-------------------")
+	}
+}
+
 func PerformRequest() {
 	response, err := http.Get("https://www.washingtonpost.com/news-sitemap-index.xml")
 	if err != nil {
