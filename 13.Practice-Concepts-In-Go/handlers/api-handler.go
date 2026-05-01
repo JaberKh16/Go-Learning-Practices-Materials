@@ -21,13 +21,12 @@ type Sitemap struct{
 }
 
 func WorkingWithXMLData(){
-	var data []byte
-	data := `<sitemapindex>
+	data :=[]byte (`<sitemapindex>
 	<sitemap>
 		<loc>https://...</loc>
 		<lastmod>2026-05-01</lastmod>
 	</sitemap>
-	</sitemapindex>`
+	</sitemapindex>`)
 
 	// Parse the XML
 	var siteMapIndex SiteMapIndex

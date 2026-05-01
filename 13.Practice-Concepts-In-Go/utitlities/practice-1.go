@@ -5,7 +5,9 @@ import (
 	"html"
 	"log"
 	"net/http"
+	"os"
 	"time"
+	"github.com/gorilla/mux"
 )
 
 func HandleIndex(w http.ResponseWriter, r *http.Request){
@@ -28,7 +30,7 @@ func HandleServerDirectory(w http.ResponseWriter, r *http.Request){
 }
 
 
-func pageHandler(w http.ResponseWriter, r *http.Request) {
+func PageHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	productID := vars["id"]
 	log.Printf("Product ID: %v\n", productID)

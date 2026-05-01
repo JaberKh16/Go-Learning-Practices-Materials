@@ -13,7 +13,7 @@ import (
 )
 
 
-func startTheHttpServer() error {
+func startDefaultHttpServer() error {
 	err := http.ListenAndServe(":8000", nil) // nil => DefaultServerMux
 	fmt.Println("Server started on http://localhost:8000")
 	if err != nil {
@@ -23,6 +23,17 @@ func startTheHttpServer() error {
 	return nil
 }
 
+func startCustomHttpServer(port string) error {
+	server := &http.Server{
+		Addr:         ":" + port,
+		Handler:      nil,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+	fmt.Println("Server started on http://localhost:" + port)
+	return server.ListenAndServe()
+}
+
 
 func main() {
 	// http.HandleFunc("/", utitlities.HandleIndex)
@@ -30,7 +41,7 @@ func main() {
 
 
 	// Start server
-	if err := startTheHttpServer(); err != nil {
+	if err := startCustomHttpServer("8000"); err != nil {
 		log.Fatal("ListenAndServe:", err)
 	}
 
@@ -52,6 +63,7 @@ func main() {
 	// router.HandleFunc("/products", productHandler).Host("www.example.com").Methods("GET").Schemes("https")
 
 	// get the resposne
+	
 	handlers.WorkingWithXMLData()
 }
 
