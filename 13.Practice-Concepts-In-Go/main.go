@@ -10,6 +10,7 @@ import (
 	"github.com/jaber/go-web/handlers"
 	// "github.com/jaber/go-web/middlewares"
 	// "github.com/jaber/go-web/utitlities"
+	"github.com/jaber/go-web/data"
 )
 
 
@@ -66,6 +67,10 @@ func main() {
 
 	// get the resposne
 	// handlers.WorkingWithXMLData()
+
+
+	// work on map
+	data.WorkOnMap()
 }
 
 
