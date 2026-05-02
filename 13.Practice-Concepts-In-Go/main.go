@@ -79,6 +79,7 @@ func main() {
 	// html template
 	templates.EscappedOrUnscappedHTMLTags(nil, nil)
 	templates.RenderTemplate(nil, nil)
+	templates.RenderConditionalTemplating()
 	
 }
 

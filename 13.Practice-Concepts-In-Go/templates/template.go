@@ -48,6 +48,7 @@ func renderConditionalTemplating() {
 	tmplString := "{{ if .Title }}{{ .Title }}{{ else }}Default Title{{ end }}" // basically checking if the title is empty or not
 	// template.Must() will panic if there is an error
 	tmpl := template.Must(template.New("conditional").Parse(tmplString))	
+	//func (t *Template) Execute(wr io.Writer, data interface{}) error
 	err := tmpl.Execute(os.Stdout, 1)
 	if err != nil {
 		fmt.Println(err)
