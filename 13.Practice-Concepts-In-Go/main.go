@@ -7,10 +7,11 @@ import (
 	"time"
 	
 	// "github.com/jaber/go-web/apis"
-	"github.com/jaber/go-web/handlers"
+	// "github.com/jaber/go-web/handlers"
 	// "github.com/jaber/go-web/middlewares"
 	// "github.com/jaber/go-web/utitlities"
-	"github.com/jaber/go-web/data"
+	// "github.com/jaber/go-web/data"
+	"github.com/jaber/go-web/templates"
 )
 
 
@@ -40,11 +41,11 @@ func startCustomHttpServer(port string) error {
 func main() {
 
 	// get the resposne
-	handlers.WorkingWithXMLData()
+	// handlers.WorkingWithXMLData()
 
 
 	// work on map
-	data.WorkOnMap()
+	// data.WorkOnMap()
 
 
 	// handlers setup here
@@ -74,6 +75,10 @@ func main() {
 	// subrouter instance
 	// router.HandleFunc("/products", productHandler).Host("www.example.com").Methods("GET").Schemes("https")
 
+
+	// html template
+	templates.EscappedOrUnscappedHTMLTags(nil, nil)
+	templates.RenderTemplate(nil, nil)
 	
 }
 
