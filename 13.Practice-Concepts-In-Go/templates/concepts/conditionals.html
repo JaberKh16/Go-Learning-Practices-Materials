@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{{.Title}}</title>
+  </head>
+  <body>
+    <h1>{{.Title}}</h1>
+
+    {{if .Content}}
+    <p>{{.Content}}</p>
+    {{else}}
+    <p>No content available</p>
+    {{end}}
+
+    <!-- // another check -->
+    {{ if eq .Role "admin"}}
+    <p>You are an admin</p>
+    {{ else if eq .Role "user"}}
+    <p>You are a user</p>
+    {{ else if eq .Role "guest"}}
+    <p>You are a guest</p>
+    {{ else }}
+    <p>You are not an admin, user, or guest</p>
+    {{ end }}
+  </body>
+</html>

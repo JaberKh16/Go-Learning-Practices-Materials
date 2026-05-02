@@ -63,3 +63,17 @@ func renderConditionalTemplating() {
 		fmt.Println(err)
 	}
 }
+
+
+func parseSequentially() {
+	// parse multiple templates
+	tmpl := template.Must(template.ParseFiles("templates/files/index.html", "templates/files/other.html"))
+	tmpl.Execute(os.Stdout, nil)
+}
+
+
+func parseSeveralFiles() {
+	// parse multiple template => template.ParseGlob()
+	tmpl := template.Must(template.ParseGlob("templates/files/*.html"))
+	tmpl.Execute(os.Stdout, nil)
+}
